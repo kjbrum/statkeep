@@ -1,0 +1,44 @@
+/*!
+Theme Name: Simple Focus Theme
+Theme URI: http://kylebrumm.com
+Description: WordPress theme for the Simple Focus website.
+Author: Kyle Brumm
+Author URI: http://www.kylebrumm.com
+License: GNU General Public License v2.0
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Version: 1.0
+*/
+
+
+// Helpers
+// ------------------------
+@import "helpers/reset";
+@import "helpers/functions";
+@import "helpers/variables";
+@import "helpers/mixins";
+@import "helpers/utility";
+
+
+// Base
+// ------------------------
+@import "base/base";
+@import "base/forms";
+@import "base/grid";
+@import "base/lists";
+@import "base/media";
+@import "base/tables";
+@import "base/typography";
+
+
+// Vendors
+// ------------------------
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css');
+
+
+// Components
+// ------------------------
+@import "components/animations";
+@import "components/buttons";
+@import "components/sections";
+@import "components/blocks";
