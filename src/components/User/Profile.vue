@@ -50,4 +50,8 @@
 </script>
 
 <style lang="scss" scoped>
+	.section--profile {
+		padding: 1rem;
+		text-align: center;
+	}
 </style>

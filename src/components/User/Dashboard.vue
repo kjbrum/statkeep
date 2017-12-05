@@ -1,38 +1,38 @@
 <template>
 	<section class="section section--dashboard">
 		<div class="stats">
-			<div class="stat" v-for="stat of stats" :key="stat['.key']">
-				<!-- Edit Stat -->
-				<template v-if="stat.isEditing">
-					<div class="stat__content">
-						<input type="text" placeholder="Name" v-model="stat.name" @keyup.enter="addStat">
-						<input type="number" placeholder="Count" v-model="stat.count" @keyup.enter="addStat">
-					</div>
-
-					<div class="stat__actions">
-						<div @click="updateStat(stat)" class="stat__save">Save</div>
-						<div @click="toggleEditStat(stat)" class="stat__cancel">Cancel</div>
-					</div>
-				</template>
-
+			<div :class="['stat', { 'stat--editing': stat.isEditing } ]" v-for="stat of stats" :key="stat['.key']">
 				<!-- Display Stat -->
-				<template v-else>
-					<div class="stat__content">
-						<div class="stat__name">{{ stat.name }}</div>
-						<div class="stat__count">{{ stat.count }}</div>
+				<div class="stat__content">
+					<div class="stat__name">{{ stat.name }}</div>
+					<div class="stat__count">
+						<div class="decrease" @click="decreaseCount(stat)"><i class="fa fa-minus"></i></div>
+						{{ stat.count }}
+						<div class="increase" @click="increaseCount(stat)"><i class="fa fa-plus"></i></div>
 					</div>
+				</div>
 
-					<div class="stat__actions">
-						<div @click="removeStat(stat)" class="stat__remove"><i class="fa fa-close"></i></div>
-						<div @click="toggleEditStat(stat)" class="stat__edit"><i class="fa fa-pencil"></i></div>
+				<div class="stat__actions">
+					<div @click="removeStat(stat)" class="stat__remove">
+						<i class="fa fa-trash-o"></i>
+						<span class="hide-vis">Remove</span>
 					</div>
-				</template>
+				</div>
 			</div>
 
-			<div class="stat__add">
-				<input type="text" placeholder="Name" v-model="newStat.name" @keyup.enter="addStat">
-				<input type="number" placeholder="Count" v-model="newStat.count" @keyup.enter="addStat">
-				<div @click="addStat">Add</div>
+			<div class="stat stat--form">
+				<div class="stat__content">
+					<div class="input--name">
+						<input type="text" placeholder="Name" v-model="newStat.name" @keyup.enter="addStat">
+					</div>
+				</div>
+
+				<div class="stat__actions">
+					<div @click="addStat" class="stat__add">
+						<i class="fa fa-plus"></i>
+						<span class="hide-vis">Add</span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -67,44 +67,60 @@
 		methods: {
 			// Add a new post
 			addStat() {
-				this.$firebaseRefs.stats.push({
-					name: this.newStat.name,
-					count: this.newStat.count,
-					isEditing: false
-				}).then(() => {
-					this.newStat = {
-						name: '',
-						count: '',
+				if (this.newStat.name) {
+					this.$firebaseRefs.stats.push({
+						name: this.newStat.name,
+						count: 0,
 						isEditing: false
-					};
-					toastr.success('Stat added successfully.');
-				});
+					}).then(() => {
+						this.newStat = {
+							name: '',
+							count: '',
+							isEditing: false
+						};
+						toastr.success('Stat added successfully.', {timeOut: 500000});
+					});
+				}
 			},
 
 			// Toggle editing a stat
-			toggleEditStat(stat) {
-				this.$firebaseRefs.stats.child(stat['.key']).update({
-					isEditing: !stat.isEditing
-				});
-			},
+			// toggleEditStat(stat) {
+			// 	this.$firebaseRefs.stats.child(stat['.key']).update({
+			// 		isEditing: !stat.isEditing
+			// 	});
+			// },
 
 			// Remove a stat
 			removeStat(stat) {
 				if (confirm(`Are you sure you want to remove "${stat.name}"?`)) {
 					this.$firebaseRefs.stats.child(stat['.key']).remove().then(() => {
-						toastr.error('Stat removed successfully.');
+						toastr.error('Stat removed successfully.', {timeOut: 500000});
 					});
 				}
 			},
 
 			// Update a stat
-			updateStat(stat) {
-				this.$firebaseRefs.stats.child(stat['.key']).set({
-					name: stat.name,
-					count: stat.count,
-					isEditing: false
-				}).then(() => {
-					toastr.success('Stat updated successfully.');
+			// updateStat(stat) {
+			// 	this.$firebaseRefs.stats.child(stat['.key']).set({
+			// 		name: stat.name,
+			// 		count: stat.count,
+			// 		isEditing: false
+			// 	}).then(() => {
+			// 		toastr.success('Stat updated successfully.');
+			// 	});
+			// },
+
+			// Increase a stat's count
+			increaseCount(stat) {
+				this.$firebaseRefs.stats.child(stat['.key']).update({
+					count: stat.count + 1
+				});
+			},
+
+			// Decrease a stat's count
+			decreaseCount(stat) {
+				this.$firebaseRefs.stats.child(stat['.key']).update({
+					count: stat.count - 1
 				});
 			},
 
@@ -131,56 +147,121 @@
 	.stat {
 		overflow: hidden;
 		position: relative;
-		display: flex;
-		align-items: center;
 		border-bottom: 1px solid $black;
 		@include r-font-size(0.7rem, 3rem);
-	}
 
-	.stat__content,
-	.stat__name,
-	.stat__count,
-	.stat__actions,
-	.stat__remove,
-	.stat__edit {
-		float: left;
-	}
+		@include bp(xs-max) {
+			text-align: center;
+		}
 
-	.stat__name,
-	.stat__count {
-		padding: 0 1rem;
+		@include bp(s) {
+			display: flex;
+			align-items: center;
+		}
 	}
 
 	.stat__content {
-		// overflow: hidden;
-		display: flex;
-		align-items: center;
-		float: left;
-		width: 85%;
-		padding: 1rem 0;
+		width: 100%;
+		padding: 1rem;
+
+		@include bp(s) {
+			display: flex;
+			align-items: center;
+		}
 	}
 
 	.stat__name {
-		width: 75%;
 		line-height: 1;
+
+		@include bp(xs-max) {
+			margin-bottom: 1.5rem;
+			font-weight: bold;
+		}
+
+		@include bp(s) {
+			width: 60%;
+			padding-right: 1rem;
+		}
 	}
 
 	.stat__count {
-		width: 25%;
-	}
+		$size: 40px;
+		position: relative;
+		text-align: center;
+		line-height: $size;
+		padding: 0 ($size + 5px);
 
-	.stat__count {
-		text-align: right;
+		@include bp(s) {
+			width: 40%;
+		}
+
+		@include bp(m) {
+			width: 30%;
+		}
+
+		.decrease,
+		.increase {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 1.2rem;
+			width: $size;
+			height: $size;
+			background-color: $gray-ultralight;
+			border-radius: 100%;
+			color: $black;
+			line-height: $size;
+		}
+
+		.decrease {
+			left: 0;
+		}
+
+		.increase {
+			right: 0;
+		}
 	}
 
 	.stat__actions {
-		width: 15%;
 		text-align: center;
 
-		.stat__remove,
-		.stat__edit {
-			width: 50%;
-			padding: 1rem 0;
+		@include bp(xs-max) {
+			display: inline-block;
+			display: none;
+		}
+
+		@include bp(s) {
+			width: 80px;
+		}
+
+		> div {
+			padding: 1rem;
+		}
+	}
+
+	.stat--form {
+		.stat__actions {
+			@include bp(xs-max) {
+				display: inline-block
+			}
+		}
+	}
+
+	.input--name {
+		float: left;
+		width: 100%;
+
+		input {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			@include r-font-size(0.7rem, 3rem);
+			border: none;
+			outline: none;
+
+			@include bp(xs-max) {
+				text-align: center;
+			}
 		}
 	}
 </style>

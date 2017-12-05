@@ -1,13 +1,11 @@
 <template>
 	<section class="section section--login">
-		<div class="container">
-			<ul class="list--plain list--inline">
-				<li><button class="btn btn--outline twitter" @click="login('twitter')">Twitter</button></li>
-				<li><button class="btn btn--outline github" @click="login('github')">Github</button></li>
-				<li><button class="btn btn--outline google" @click="login('google')">Google</button></li>
-				<li><button class="btn btn--outline facebook" @click="login('facebook')">Facebook</button></li>
-			</ul>
-		</div>
+		<ul class="list--plain list--inline">
+			<li><button class="btn btn--outline twitter" @click="login('twitter')">Twitter</button></li>
+			<li><button class="btn btn--outline github" @click="login('github')">Github</button></li>
+			<li><button class="btn btn--outline google" @click="login('google')">Google</button></li>
+			<li><button class="btn btn--outline facebook" @click="login('facebook')">Facebook</button></li>
+		</ul>
 	</section>
 </template>
 
@@ -51,7 +49,16 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "src/assets/scss/settings";
+	@import "src/assets/scss/settings";
+
+	.section--login {
+		padding: 1rem;
+		text-align: center;
+
+		ul {
+			display: inline-block;
+		}
+	}
 
 	.btn {
 		&.twitter { color: $twitter; }

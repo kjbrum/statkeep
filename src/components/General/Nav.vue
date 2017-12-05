@@ -1,9 +1,26 @@
 <template>
 	<nav class="nav" v-if="user">
 		<ul class="list--plain list--inline nav__link-list">
-			<li class="nav__link"><router-link to="/dashboard">Dashboard</router-link></li>
-			<li class="nav__link"><router-link to="/profile">Profile</router-link></li>
-			<li class="nav__link"><a href="#" @click="logout">Logout</a></li>
+			<li class="nav__link">
+				<router-link to="/dashboard">
+					<i class="fa fa-tachometer"></i>
+					<span class="hide-vis">Dashboard</span>
+				</router-link>
+			</li>
+
+			<li class="nav__link">
+				<router-link to="/profile">
+					<i class="fa fa-user"></i>
+					<span class="hide-vis">Profile</span>
+				</router-link>
+			</li>
+
+			<li class="nav__link">
+				<a href="#" @click="logout">
+					<i class="fa fa-sign-out"></i>
+					<span class="hide-vis">Logout</span>
+				</a>
+			</li>
 		</ul>
 	</nav>
 </template>
@@ -55,9 +72,17 @@
 		right: 1rem;
 		transform: translateY(-50%);
 
-		.router-link-active {
-			text-decoration: underline;
-			font-weight: bold;
+		.nav__link {
+			margin-left: 1rem;
+
+			a {
+				color: $gray;
+				font-size: 2rem;
+
+				&.router-link-active {
+					color: $primary;
+				}
+			}
 		}
 	}
 </style>

@@ -33,7 +33,7 @@ Version: 1.0
 // Vendors
 // ------------------------
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css');
+// @import url('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css');
 
 
 // Components
@@ -42,3 +42,4 @@ Version: 1.0
 @import "components/buttons";
 @import "components/sections";
 @import "components/blocks";
+@import "components/toastr";
